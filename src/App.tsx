@@ -6,10 +6,12 @@ import { TourControls } from './components/TourControls';
 import { ProgressBar } from './components/ProgressBar';
 import { Chatbot } from './components/Chatbot';
 import { TourModeSelector } from './components/TourModeSelector';
+import { useAuth } from './context/AuthContext';
 
 function App() {
   const [tourMode, setTourMode] = useState('complete');
   const [tourIndex, setTourIndex] = useState(0);
+  const { user, signOut } = useAuth();
 
   const currentTour = TOUR_MODES[tourMode];
   const tourLocations = currentTour.locations;
@@ -65,17 +67,29 @@ function App() {
   const nextLocationName = tourIndex < tourLocations.length - 1
     ? LOCATIONS[tourLocations[tourIndex + 1]].name
     : undefined;
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
-      <header className="bg-gradient-to-r from-amber-800 to-orange-700 text-white py-6 shadow-lg">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold text-center mb-2">
-            Taj Mahal Virtual Tourist Guide
-          </h1>
-          <p className="text-center text-amber-100">
-            Explore the world's most beautiful monument from anywhere
-          </p>
+      <header className="bg-gradient-to-r from-amber-800 to-orange-700 py-6 text-white shadow-lg">
+        <div className="container mx-auto flex flex-col gap-4 px-4 text-center md:flex-row md:items-center md:justify-between md:text-left">
+          <div>
+            <h1 className="mb-2 text-4xl font-bold">
+              Smart Tourist Assistant
+            </h1>
+            <p className="text-amber-100">
+              Explore the world's most beautiful monument from anywhere
+            </p>
+          </div>
+          <div className="rounded-lg bg-white/10 px-5 py-3 text-sm">
+            <p className="text-amber-100">
+              Signed in as <span className="font-semibold text-white">{user?.email}</span>
+            </p>
+            <button
+              onClick={() => signOut()}
+              className="mt-2 w-full rounded-md bg-white/90 px-4 py-2 text-xs font-semibold text-amber-800 transition hover:bg-white"
+            >
+              Sign out
+            </button>
+          </div>
         </div>
       </header>
 
@@ -142,7 +156,7 @@ function App() {
 
       <footer className="bg-gray-800 text-white py-8 mt-12">
         <div className="container mx-auto px-4 text-center">
-          <h3 className="text-xl font-semibold mb-2">Taj Mahal Virtual Tourist Guide</h3>
+          <h3 className="text-xl font-semibold mb-2">Smart Tourist Assistant</h3>
           <p className="text-gray-300 mb-1">UNESCO World Heritage Site since 1983</p>
           <p className="text-sm text-gray-400">
             This virtual tour is designed to complement your actual visit to the Taj Mahal
